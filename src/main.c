@@ -5,7 +5,7 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Mon Nov  6 11:28:04 2017 
-** Last update Fri Nov 10 18:18:17 2017 
+** Last update Fri Nov 10 19:28:19 2017 
 */
 
 # define _POSIX_C_SOURCE 200809L
@@ -17,6 +17,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include "ftp_bounce.h"
+#include "options.h"
 
 # define BUF_SIZE 256
 
@@ -83,12 +84,23 @@ int			main(int argc, char *argv[])
   char			buffer[BUF_SIZE] = {0};
   char			*cmd_port_ip;
   char			*commands;
+  struct s_options	options;
+
+  options = get_args(argc, argv);
+
+  fprintf(stdout, "options.help: %d\n", options.help);
+  fprintf(stdout, "PROXY: %s\n", options.ftp);
+  fprintf(stdout, "username: %s\n", options.username);
+  fprintf(stdout, "password: %s\n", options.password);
+  fprintf(stdout, "TARGET: %s\n", options.target);
+
+  return (0);
 
   memset(&ftp_serv, 0, sizeof ftp_serv);
   ftp_serv.ai_family = AF_UNSPEC;
   ftp_serv.ai_socktype = SOCK_STREAM;
 
-  if (argc != 2 || getaddrinfo("ftp.epitech.eu", "ftp", &ftp_serv, &res)
+  if (getaddrinfo(options.ftp, "ftp", &ftp_serv, &res)
       || (sd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1
       || connect(sd, res->ai_addr, res->ai_addrlen))
     return (PRINT_ERROR(""), EXIT_FAILURE);
@@ -96,14 +108,13 @@ int			main(int argc, char *argv[])
   if (read_test_next_value(sd, buffer, "220") <= 0)
     return (EXIT_FAILURE);
 
-  if (!authentication(sd, buffer, "anonymous", ""))
+  if (!authentication(sd, buffer, options.username, options.password))
     return (EXIT_FAILURE);
   fprintf(stderr, "[+] Successfully authenticated to ftp \"proxy\" server\n");
 
-  return (0);
   commands = NULL;
   concat_strings(&commands, "PORT ");
-  concat_strings(&commands, replace_dots_with_comas(argv[1]));
+  concat_strings(&commands, replace_dots_with_comas(options.target));
   cmd_port_ip = strdup(commands);
 
   if (!port_scan(sd, cmd_port_ip))
@@ -113,6 +124,7 @@ int			main(int argc, char *argv[])
   free(commands);
   fprintf(stdout, "[+] Scan finished\n");
   return (EXIT_SUCCESS);
+  /* (void)options; */
 }
 
 # undef BUF_SIZE

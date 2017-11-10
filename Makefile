@@ -5,11 +5,12 @@
 ## Login SRJanel <n******.******s@epitech.eu>
 ## 
 ## Started on  Mon Nov  6 11:27:34 2017 
-## Last update Fri Nov 10 18:05:55 2017 
+## Last update Fri Nov 10 19:02:11 2017 
 ##
 
 SRC	= src/main.c \
 	src/utils.c \
+	src/options.c \
 
 OBJ	= $(SRC:.c=.o)
 
