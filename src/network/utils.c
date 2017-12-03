@@ -5,10 +5,9 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Fri Dec  1 15:49:49 2017 
-** Last update Fri Dec  1 16:42:21 2017 
+** Last update Sun Dec  3 22:11:26 2017 
 */
 
-# define _POSIX_C_SOURCE 200112L
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>

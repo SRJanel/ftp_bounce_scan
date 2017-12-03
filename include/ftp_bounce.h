@@ -5,15 +5,16 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Fri Nov 10 18:02:46 2017 
-** Last update Sun Dec  3 02:28:58 2017 
+** Last update Sun Dec  3 21:19:30 2017 
 */
 
 #ifndef FTP_BOUNCE_H_
 # define FTP_BOUNCE_H_
 
-#include <stdio.h>
-#include <netdb.h>
+# include <stdio.h>
+# include <netdb.h>
 
+# define ALWAYS_INLINE			__attribute__((always_inline)) __inline__
 # define PRINT_ERROR(MESG)		fprintf(stderr, "%s (%s:%s:%d): %s\n", MESG, \
 						__extension__ __FILE__, __FUNCTION__, __LINE__, \
 						strerror(errno))
@@ -40,10 +41,9 @@ char					write_next_cmd(int, const char *);
 void					concat_strings(char **, const char *);
 char					read_test_next_value(int, char *, char *);
 char					test_server_response(const char *, const char *);
-char					resolve_hostname(const char *hostname, const char *service,
-							 struct addrinfo **addr_info, char **ip);
-void					build_cmd_list(char **ptr);
-void					build_cmd_port(char **ptr, size_t port);
-
+char					resolve_hostname(const char *, const char *,
+							 struct addrinfo **, char **);
+void					build_cmd_list(char **);
+void					build_cmd_port(char **, size_t);
 
 #endif /* !FTP_BOUNCE_H_ */

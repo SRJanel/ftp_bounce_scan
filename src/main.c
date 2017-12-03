@@ -5,7 +5,7 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Mon Nov  6 11:28:04 2017 
-** Last update Sun Dec  3 02:51:29 2017 
+** Last update Sun Dec  3 22:09:32 2017 
 */
 
 #include <errno.h>
@@ -18,10 +18,11 @@
 #include <netdb.h>
 #include "ftp_bounce.h"
 #include "options.h"
+#include "messages.h"
 
-__attribute__((always_inline)) __inline__ static void	usage(const char *prog_name)
+static void	usage(const char *prog_name)
 {
-  fprintf(stderr, "USAGE: %s -f ftp_server -u username -p password -t target_server\n"	\
+  fprintf(stderr, "USAGE: %s -f ftp_server -u username -p password -t target_server\n" \
 	  "\t-f, --ftp\t\tftp \"proxy\" server to connect to\n"
 	  "\t-u, --username\t\tUsername for ftp \"proxy\" server\n"
 	  "\t-p, --password\t\tPassword for ftp \"proxy\" server\n"
@@ -79,15 +80,18 @@ char	security_checks(size_t *port, char *cmd_recv)
 }
 
 #undef MAX_PORT
-#define MAX_PORT 1025
-char		port_scan(int sd, char *cmd_port_ip)
+#define MAX_PORT 1026
+char		port_scan(int sd, char *target)
 {
   size_t	port;
   char		*cmd_send;
   char		cmd_recv[BUF_SIZE] = {0};
   char		sec_check;
+  char		*cmd_port_ip = NULL;
 
   port = 0;
+  concat_strings(&cmd_port_ip, "PORT ");
+  concat_strings(&cmd_port_ip, replace_dots_with_comas(target));
   while (++port <= MAX_PORT)
     {
       cmd_send = strdup(cmd_port_ip);
@@ -105,14 +109,10 @@ char		port_scan(int sd, char *cmd_port_ip)
   	return (0);
       if (read_test_next_value(sd, cmd_recv, FTP_CODE_150) > 0
 	  && read_test_next_value(sd, cmd_recv, FTP_CODE_226) > 0)
-	fprintf(stdout, "[+] Port: %ld open\n", port);
-      /* else if (strncmp(cmd_send, "200", 3)) */
-      /* 	fprintf(stdout, "[-] Could not connect to target\n"); */
-	
-      if (strncmp(cmd_send, FTP_CODE_425, 3))
-      	fprintf(stdout, "[-] Port: %ld closed\n", port);
+	fprintf(stdout, MSG_PORT_OPEN, port);
       free(cmd_send);
     }
+  free(cmd_port_ip);
   return (1);
 }
 
@@ -121,7 +121,6 @@ int			main(int argc, char *argv[])
   int			sd;
   struct addrinfo	*result;
   char			buffer[BUF_SIZE] = {0};
-  char			*cmd_port_ip = NULL;
   struct s_options	options;
   char			*target;
 
@@ -130,24 +129,22 @@ int			main(int argc, char *argv[])
       || !options.ftp || !options.username || !options.target)
     return (usage(argv[0]), EXIT_FAILURE);
   if (!(resolve_hostname(options.ftp, "ftp", &result, &target)))
-    return (PRINT_ERROR("[-] Could not resolve ftp IP"), EXIT_FAILURE);  
+    return (PRINT_ERROR(ERR_RESOLV_PROXY), EXIT_FAILURE);  
   if ((sd = socket(result->ai_family, result->ai_socktype, result->ai_protocol)) == -1
       || connect(sd, result->ai_addr, result->ai_addrlen))
-    return (fprintf(stderr, "Could not connect to FTP server\n"), EXIT_FAILURE);
+    return (fprintf(stderr, ERR_CONN_PROXY), EXIT_FAILURE);
   if (!authentication(sd, buffer, options.username, options.password))
-    return (fprintf(stdout, "ERROR: %s", buffer), EXIT_FAILURE);
-  fprintf(stderr, "[+] Successfully authenticated to ftp \"proxy\" server: '%s'\n", options.ftp);
+    return (fprintf(stderr, "ERROR: %s", buffer), EXIT_FAILURE);
+  fprintf(stderr, MSG_CONN_PROXY " '%s'\n", options.ftp);
   freeaddrinfo(result);
   if (!(resolve_hostname(options.target, NULL, &result, &target)))
-    return (PRINT_ERROR("[-] Could not resolve target IP"), EXIT_FAILURE);  
-  fprintf(stdout, "Target: %s\n", target);
-  concat_strings(&cmd_port_ip, "PORT ");
-  concat_strings(&cmd_port_ip, replace_dots_with_comas(target));
-  fprintf(stderr, "[+] Begin scan\n");
-  if (!port_scan(sd, cmd_port_ip))
-    return (PRINT_ERROR("Could not scan"), EXIT_FAILURE);
-  fprintf(stdout, "[+] Scan finished\n");
-  free(cmd_port_ip);
+    return (PRINT_ERROR(ERR_RESOLV_TARGET), EXIT_FAILURE);  
+
+  /* fprintf(stdout, "Target: %s\n", target); */
+  fprintf(stderr, MSG_SCAN_BEGIN);
+  if (!port_scan(sd, target))
+    return (PRINT_ERROR(ERR_SCAN), EXIT_FAILURE);
+  fprintf(stdout, MSG_SCAN_END);
   freeaddrinfo(result);
   return (EXIT_SUCCESS);
 }
