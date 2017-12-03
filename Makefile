@@ -5,12 +5,14 @@
 ## Login SRJanel <n******.******s@epitech.eu>
 ## 
 ## Started on  Mon Nov  6 11:27:34 2017 
-## Last update Fri Nov 10 19:02:11 2017 
+## Last update Sun Dec  3 01:57:20 2017 
 ##
 
 SRC	= src/main.c \
 	src/utils.c \
 	src/options.c \
+	src/network/utils.c \
+	src/build_cmd.c \
 
 OBJ	= $(SRC:.c=.o)
 
@@ -23,7 +25,8 @@ CC	= gcc
 CFLAGS	+= -Wall -Wextra -Werror
 CFLAGS	+= -ansi # -pedantic-errors
 CFLAGS	+= -I./include
-#CFLAGS	+= -ggdb3
+CFLAGS	+= -D_GNU_SOURCE
+CFLAGS	+= -ggdb3 -g3
 
 all: $(NAME)
 
