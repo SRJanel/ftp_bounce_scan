@@ -35,6 +35,7 @@
 # define FTP_CODE_331			"331"
 # define FTP_CODE_230			"230"
 # define FTP_CODE_500			"500"
+# define ADD_CRLF(MESG)			MESG CR LF
 
 char					*replace_dots_with_comas(char *);
 char					write_next_cmd(int, const char *);

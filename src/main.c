@@ -5,7 +5,7 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Mon Nov  6 11:28:04 2017 
-** Last update Sun Dec  3 22:09:32 2017 
+** Last update Sun Dec  3 23:36:07 2017 
 */
 
 #include <errno.h>
@@ -40,17 +40,12 @@ char	authentication(int sd, char *buffer,
     return (0);
   cmd = NULL;
   ret = 1;
-  concat_strings(&cmd, "user ");
-  concat_strings(&cmd, username);
-  concat_strings(&cmd, "\r\n");
+  asprintf(&cmd, ADD_CRLF("user %s"), username);
   if (write_next_cmd(sd, cmd) == -1
       || read_test_next_value(sd, buffer, FTP_CODE_331) <= 0)
     return (!ret);
   free(cmd);
-  cmd = NULL;
-  concat_strings(&cmd, "pass ");
-  concat_strings(&cmd, password);
-  concat_strings(&cmd, "\r\n");
+  asprintf(&cmd, ADD_CRLF("pass %s"), password);
   if ((write_next_cmd(sd, cmd) == -1
        || read_test_next_value(sd, buffer, FTP_CODE_230) <= 0))
     ret = 0;
@@ -65,22 +60,24 @@ char	security_checks(size_t *port, char *cmd_recv)
   ret = 0;
   if (*port < 1024 && !strncmp(cmd_recv, FTP_CODE_500, 3))
     {
-      fprintf(stderr, MESSAGE_FTP_UNVULN_1024	\
-	      MESSAGE_FTP_TRY_1024_UP);
+      fprintf(stderr, MSG_FTP_UNVULN_1024	\
+	      MSG_FTP_TRY_1024_UP);
       *port = 1023;
       ret = 1;
     }
   else if (*port >= 1024 && !strncmp(cmd_recv, FTP_CODE_500, 3))
     {
-      fprintf(stderr, MESSAGE_FTP_NOT_VULN);
+      fprintf(stderr, MSG_FTP_NOT_VULN);
       ret = 2;
     }
   return (ret);
 
 }
 
-#undef MAX_PORT
-#define MAX_PORT 1026
+#ifdef _SECURE_RUN
+# undef MAX_PORT
+# define MAX_PORT 1026
+#endif /* !_SECURE_RUN */
 char		port_scan(int sd, char *target)
 {
   size_t	port;
@@ -129,7 +126,7 @@ int			main(int argc, char *argv[])
       || !options.ftp || !options.username || !options.target)
     return (usage(argv[0]), EXIT_FAILURE);
   if (!(resolve_hostname(options.ftp, "ftp", &result, &target)))
-    return (PRINT_ERROR(ERR_RESOLV_PROXY), EXIT_FAILURE);  
+    return (PRINT_ERROR(ERR_RSLV_PROXY), EXIT_FAILURE);  
   if ((sd = socket(result->ai_family, result->ai_socktype, result->ai_protocol)) == -1
       || connect(sd, result->ai_addr, result->ai_addrlen))
     return (fprintf(stderr, ERR_CONN_PROXY), EXIT_FAILURE);
@@ -138,7 +135,7 @@ int			main(int argc, char *argv[])
   fprintf(stderr, MSG_CONN_PROXY " '%s'\n", options.ftp);
   freeaddrinfo(result);
   if (!(resolve_hostname(options.target, NULL, &result, &target)))
-    return (PRINT_ERROR(ERR_RESOLV_TARGET), EXIT_FAILURE);  
+    return (PRINT_ERROR(ERR_RSLV_TARGET), EXIT_FAILURE);  
 
   /* fprintf(stdout, "Target: %s\n", target); */
   fprintf(stderr, MSG_SCAN_BEGIN);
