@@ -5,7 +5,7 @@
 ## Login SRJanel <n******.******s@epitech.eu>
 ## 
 ## Started on  Mon Nov  6 11:27:34 2017 
-## Last update Sun Dec  3 01:57:20 2017 
+## Last update Sun Dec  3 23:38:53 2017 
 ##
 
 SRC	= src/main.c \
@@ -26,7 +26,7 @@ CFLAGS	+= -Wall -Wextra -Werror
 CFLAGS	+= -ansi # -pedantic-errors
 CFLAGS	+= -I./include
 CFLAGS	+= -D_GNU_SOURCE
-CFLAGS	+= -ggdb3 -g3
+#CFLAGS	+= -ggdb3 -g3
 
 all: $(NAME)
 
