@@ -5,7 +5,7 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Sat Oct 14 21:53:05 2017 
-** Last update Fri Nov 10 19:20:12 2017 
+** Last update Fri Nov 24 02:32:12 2017 
 */
 
 #include <unistd.h>
@@ -16,11 +16,11 @@ struct s_options			get_args(int argc, char **argv)
   {
     int					c;
     int					index;
-    struct s_options			options = {.0};
+    struct s_options			options = {0};
     struct option			long_options[] =
       {
 	{"username", required_argument, NULL, 'u'},
-	{"password", required_argument, NULL, 'p'},
+	{"password", optional_argument, NULL, 'p'},
 	{"ftp", required_argument, NULL, 'f'},
 	{"target", required_argument, NULL, 't'},
 	{"help", no_argument, &options.help, 1},
@@ -33,7 +33,8 @@ struct s_options			get_args(int argc, char **argv)
 			     "t:f:u:p:h",
 			     long_options, &index)) == -1)
 	  break ;
-	else if (c == 'u')
+	if (optarg && *optarg == '-') continue ;
+	if (c == 'u')
 	  options.username = optarg;
 	else if (c == 'p')
 	  options.password = optarg;
