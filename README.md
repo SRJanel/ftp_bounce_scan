@@ -7,4 +7,4 @@ In my opinion it's one of the easiest scans to perform in terms of code complexi
 (Do not forget that this is as noisy as a Vanilla scan and detectable on the target side and on the proxy (FTP) server as well)  
 
 ## Usage
-./ftp_bouce_scan --username anonymous --pass "" --ftp ftp.server.com --target target_server.com  
+```./ftp_bouce_scan --username anonymous --pass "" --ftp ftp.server.com --target target_server.com```
