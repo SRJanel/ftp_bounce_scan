@@ -5,7 +5,7 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Fri Nov 10 18:02:46 2017 
-** Last update Sun Dec  3 21:19:30 2017 
+** Last update Sun Dec  3 23:33:45 2017 
 */
 
 #ifndef FTP_BOUNCE_H_
@@ -24,17 +24,6 @@
 # define CR				"\r"
 # define LF				"\n"
 # define ADD_LF(MESG)			MESG LF
-# define MESSAGE_FTP_UNVULN_1024	ADD_LF("[-] Proxy server cannot scan ports below 1024.")
-# define MESSAGE_FTP_TRY_1024_UP	ADD_LF("[*] Trying to scan ports from 1024 and upwards.")
-# define MESSAGE_FTP_NOT_VULN		ADD_LF("[-] Proxy server does not seem to be vulnerable")
-# define FTP_CODE_150			"150"
-# define FTP_CODE_200			"200"
-# define FTP_CODE_220			"220"
-# define FTP_CODE_226			"226"
-# define FTP_CODE_425			"425"
-# define FTP_CODE_331			"331"
-# define FTP_CODE_230			"230"
-# define FTP_CODE_500			"500"
 # define ADD_CRLF(MESG)			MESG CR LF
 
 char					*replace_dots_with_comas(char *);
