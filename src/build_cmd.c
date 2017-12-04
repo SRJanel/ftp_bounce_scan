@@ -5,7 +5,7 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Sun Dec  3 00:58:47 2017 
-** Last update Sun Dec  3 21:30:57 2017 
+** Last update Mon Dec  4 17:33:48 2017 
 */
 
 #include <stdio.h>
@@ -19,7 +19,7 @@ ALWAYS_INLINE void	build_cmd_list(char **ptr)
   concat_strings(ptr, "\r\n");
 }
 
-void	build_cmd_port(char **ptr, size_t port)
+__inline__ void	build_cmd_port(char **ptr, size_t port)
 {
   char	port_tmp[9];
 

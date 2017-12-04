@@ -5,12 +5,13 @@
 ## Login SRJanel <n******.******s@epitech.eu>
 ## 
 ## Started on  Mon Nov  6 11:27:34 2017 
-## Last update Sun Dec  3 23:38:53 2017 
+## Last update Mon Dec  4 18:27:07 2017 
 ##
 
 SRC	= src/main.c \
 	src/utils.c \
 	src/options.c \
+	src/ftp_scan.c \
 	src/network/utils.c \
 	src/build_cmd.c \
 

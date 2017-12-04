@@ -5,7 +5,7 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Fri Nov 10 18:02:46 2017 
-** Last update Sun Dec  3 23:33:45 2017 
+** Last update Mon Dec  4 18:32:05 2017 
 */
 
 #ifndef FTP_BOUNCE_H_
@@ -26,14 +26,32 @@
 # define ADD_LF(MESG)			MESG LF
 # define ADD_CRLF(MESG)			MESG CR LF
 
-char					*replace_dots_with_comas(char *);
-char					write_next_cmd(int, const char *);
-void					concat_strings(char **, const char *);
-char					read_test_next_value(int, char *, char *);
+/*
+** src/utils.c
+*/
 char					test_server_response(const char *, const char *);
+char					read_test_next_value(int, char *, char *);
+char					write_next_cmd(int, const char *);
+char					*replace_dots_with_comas(char *);
+void					concat_strings(char **, const char *);
+
+/*
+** src/network/utils.c
+*/
 char					resolve_hostname(const char *, const char *,
 							 struct addrinfo **, char **);
+
+/*
+** src/build_cmd.c
+*/
 void					build_cmd_list(char **);
 void					build_cmd_port(char **, size_t);
+
+/*
+** src/ftp_scan.c
+*/
+char					authentication(int, char *,
+						       const char *, const char *);
+char					port_scan(int, char *);
 
 #endif /* !FTP_BOUNCE_H_ */
