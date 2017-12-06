@@ -5,14 +5,11 @@
 ** Login SRJanel <n******.******s@epitech.eu>
 ** 
 ** Started on  Sat Oct 14 21:57:19 2017 
-** Last update Mon Dec  4 18:13:06 2017 
+** Last update Tue Dec  5 16:02:26 2017 
 */
 
 #ifndef OPTIONS_H_
 # define OPTIONS_H_
-
-# define STRINGIFY(x) #x
-# define MAKE_STRING(x) STRINGIFY(x)
 
 # define OPTIONS_WITH_ARG_TABLE						\
   ENTRY(ftp, required_argument, 'f')					\
@@ -25,7 +22,14 @@
 
 # define OPTSTRING	"t:f:u:p:h"
 
-extern struct s_options {
+/*
+** ________________________________________________
+** ------------------------------------------------
+*/
+# define STRINGIFY(x) #x
+# define MAKE_STRING(x) STRINGIFY(x)
+
+struct s_options {
 # define ENTRY(FIELD, UNUSED1, UNUSED2) char *FIELD;
   OPTIONS_WITH_ARG_TABLE
 # undef ENTRY
